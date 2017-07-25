@@ -27,7 +27,7 @@ public class CollectionAttributeItem extends AbstractAttributeItem{
      */
     public String associateSelectMethod(){
         if(StringUtil.isNotNull(super.attrName))
-            return "find_associate_"+super.attrName;
+            return "find_collection_"+super.attrName;
         else
             throw new RuntimeException("生成关联条件查询方法名发生异常！super.attrName IS NULL!");
     }
