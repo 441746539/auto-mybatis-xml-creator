@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	<typeAliases>
+		<typeAlias alias="Person" type="my.demo.Person"/>
+		<typeAlias alias="Department" type="my.demo.Department"/>
+		<typeAlias alias="PersonDto" type="my.demo.PersonDto"/>
+		<typeAlias alias="DepartmentDto" type="my.demo.DepartmentDto"/>
+	</typeAliases>
+</configuration>

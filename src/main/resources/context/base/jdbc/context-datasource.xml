@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                    http://www.springframework.org/schema/tx 
+                    http://www.springframework.org/schema/tx/spring-tx-3.2xsd
+                    http://www.springframework.org/schema/jee 
+                    http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+               		http://www.springframework.org/schema/aop
+					http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+                    http://www.springframework.org/schema/context 
+                    http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+   <!-- DataSource -->
+   <bean id="dataSource" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean">     
+       <property name="uniqueResourceName" value="MySQLNonXADataSource"/>
+       <property name="driverClassName" value="${cons.jdbc.driverClassName}"/>     
+       <property name="url" value="${cons.jdbc.url}"/>
+       <property name="user" value="${cons.jdbc.username}"/>
+       <property name="password" value="${cons.jdbc.password}"/>
+       <property name="poolSize" value="${cons.jdbc.poolSize}"/>
+       <property name="maxPoolSize" value="${cons.jdbc.maxPoolSize}"/> 
+       <property name="maxIdleTime" value="${cons.jdbc.maxIdleTime}"/>
+       <property name="testQuery" value="${cons.jdbc.testQuery}"/>
+   </bean>  
+   
+
+	
+</beans>

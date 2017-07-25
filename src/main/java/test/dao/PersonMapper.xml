@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.dao.PersonMapper">
+    <resultMap type="Person" id="PersonMap">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="DEPARTMENT_ID" property="departmentId" jdbcType="VARCHAR"/>
+        <association property="department" column="department_id" javaType="Department" select="find_associate_department"/></resultMap>
+    <resultMap type="Department" id="DepartmentMap">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="DNAME" property="dname" jdbcType="VARCHAR"/>
+        <collection property="persons" column="id" javaType="ArrayList" ofType="Person" select="find_associate_persons"/></resultMap>
+    <select id="find_associate_department" parameterType="string" resultMap="DepartmentMap">
+        select * from department where id = #{department_id,jdbcType=VARCHAR}
+    </select>
+    <select id="find_associate_persons" parameterType="string" resultMap="PersonMap">
+        select * from person where department_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="list" parameterType="PersonDto" resultMap="PersonMap">
+        select a.id,a.name,a.department_id from person  a
+        where 1=1
+        <if test="id != null &amp;&amp; id != ''">
+            and a.id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null &amp;&amp; name != ''">
+            and a.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="departmentId != null &amp;&amp; departmentId != ''">
+            and a.department_id = #{departmentId,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="PersonDto">
+        insert into person(
+        <trim prefix="" suffixOverrides=",">
+            <if test="id != null &amp;&amp; id != ''">
+                id,
+            </if>
+            <if test="name != null &amp;&amp; name != ''">
+                name,
+            </if>
+            <if test="departmentId != null &amp;&amp; departmentId != ''">
+                department_id,
+            </if>
+        </trim>
+        )
+        values (
+        <trim prefix="" suffixOverrides=",">
+            <if test="id != null &amp;&amp; id != ''">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null &amp;&amp; name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentId != null &amp;&amp; departmentId != ''">
+                #{departmentId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="update" parameterType="PersonDto">
+        update person
+        <set>
+            <if test="id != null &amp;&amp; id != ''">
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null &amp;&amp; name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentId != null &amp;&amp; departmentId != ''">
+                department_id = #{departmentId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete" parameterType="PersonDto">
+        delete from person where  id = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper>

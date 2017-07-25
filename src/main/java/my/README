@@ -1,0 +1,43 @@
+Createdby 苏强 20170725
+
+--使用说明--
+
+案例: 数据库有表department和person, 前者与后者关系为一对多。person的外键字段department_id关联department表的字段id。
+0.先看一下my.demo和test里的代码。
+1.新建department和person的实体类Department和Person，放到“my.bean”下面。
+  【department】:
+  （1）.Department类加上注解：@TableInfo(tableName = "department", parameterType = "DepartmentDto", resultMap = "DepartmentMap")
+        注解参数中，tableName表示映射数据库表名；
+                    parameterType是mybatis生成的方法的输入参数typeAlias名（需要在mybatis注册typeAlias）；
+                    resultMap是这个表生成的resultMap的id,一般给"类名+Map"。
+  （2）.添加映射属性字段
+        主键用@PrimaryId标记。
+        除了主键，字段名和数据库字段有映射，加上@DBColumn注解。字段列名和数据库不一致，用@DBColumn("department_id")标记。
+  （3）.关联查询
+        此处需要关联查询List<Person>,添加此属性，标注注解 @CollectionColumn(itemClass = Person.class, foreignKeyColunm = "id", relColumnInforeignTable = "department_id")
+        注解参数中，itemClass表示关联对象Class；
+                    foreignKeyColunm表示双方关联字段中，本表的数据列字段名；
+                    relColumnInforeignTable表示双方关联字段中，外表的数据列字段名；
+  （4）.不需要解析的其他字段标记@Skip
+
+  【person】:
+  （1，2,4）.同department
+  （3）.此处需要关联查询Person,添加此属性，标注注解 @AssosiationColumn(foreignKeyColunm = "department_id", relColumnInforeignTable = "id")
+        字段解释类似department中@CollectionColumn。
+
+2. 生成Mapper内容
+  （1）.确保实体了相关Vo,Dto都已经注册typeAlias。
+  （2）.为了防止关联查询嵌套，mybatis配置：
+        <settings>
+            <setting name="lazyLoadingEnabled" value="true" />
+            <setting name="aggressiveLazyLoading" value="false"/>
+        </settings>
+  （3）.【分别】用：
+        System.out.println(CoreProcessor.doProcess("test.dao.PersonMapper", Person.class).toString());
+        System.out.println(CoreProcessor.doProcess("test.dao.DepartmentMapper", Department.class).toString());
+        调用输出mapper内容，doProcess的第一个参数是mapper接口的类名。当然也先可以不在这里加。
+
+        tip: 一般来说不需要双向管理查询，生成Person的Mapper的时候，可以去掉Department里的级联。反之亦然。
+
+3.根据实际情况调整mapper.xml内容
+  包括select中的条件，关联查询的条件等等。
