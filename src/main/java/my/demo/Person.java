@@ -1,9 +1,6 @@
 package my.demo;
 
-import my.framework.annotation.AssosiationColumn;
-import my.framework.annotation.DBColumn;
-import my.framework.annotation.PrimaryId;
-import my.framework.annotation.TableInfo;
+import my.framework.annotation.*;
 
 /**
  * Created by qiang.su on 2017/7/24.
@@ -17,6 +14,10 @@ public class Person {
     private String name;
     @DBColumn("department_id")
     private String departmentId;
+    @DBColumn("create_time")
+    @DateType(pattern = "%Y-%m-%d")
+    private String createTime;
+
     @AssosiationColumn(foreignKeyColunm = "department_id", relColumnInforeignTable = "id")
     private Department department;
 
@@ -34,5 +35,13 @@ public class Person {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

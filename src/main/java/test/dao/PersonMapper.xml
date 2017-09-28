@@ -7,20 +7,21 @@
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="NAME" property="name" jdbcType="VARCHAR"/>
         <result column="DEPARTMENT_ID" property="departmentId" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR"/>
         <association property="department" column="department_id" javaType="Department" select="find_associate_department"/></resultMap>
     <resultMap type="Department" id="DepartmentMap">
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="DNAME" property="dname" jdbcType="VARCHAR"/>
-        <collection property="persons" column="id" javaType="ArrayList" ofType="Person" select="find_associate_persons"/></resultMap>
+        <collection property="persons" column="id" javaType="ArrayList" ofType="Person" select="find_collection_persons"/></resultMap>
     <select id="find_associate_department" parameterType="string" resultMap="DepartmentMap">
         select * from department where id = #{department_id,jdbcType=VARCHAR}
     </select>
-    <select id="find_associate_persons" parameterType="string" resultMap="PersonMap">
+    <select id="find_collection_persons" parameterType="string" resultMap="PersonMap">
         select * from person where department_id = #{id,jdbcType=VARCHAR}
     </select>
 
     <select id="list" parameterType="PersonDto" resultMap="PersonMap">
-        select a.id,a.name,a.department_id from person  a
+        select a.id,a.name,a.department_id,a.create_time from person  a
         where 1=1
         <if test="id != null &amp;&amp; id != ''">
             and a.id = #{id,jdbcType=VARCHAR}
@@ -31,7 +32,30 @@
         <if test="departmentId != null &amp;&amp; departmentId != ''">
             and a.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
-    </select>
+        <if test="createTimeBegin != null &amp;&amp; createTimeBegin  != ''">
+            <![CDATA[ and date_format(a.create_time, '%Y-%m-%d') >= date_format(#{createTimeBegin,jdbcType=VARCHAR}, '%Y-%m-%d') ]]>
+        </if>
+        <if test="createTimeEnd  != null &amp;&amp; createTimeEnd  != ''">
+            <![CDATA[ and date_format(a.create_time, '%Y-%m-%d') <= date_format(#{createTimeEnd,jdbcType=VARCHAR}, '%Y-%m-%d') ]]>
+        </if></select>
+    <select id="list" parameterType="PersonDto" resultMap="PersonMap">
+        select a.id,a.name,a.department_id,a.create_time from person  a
+        where 1=1
+        <if test="id != null &amp;&amp; id != ''">
+            and a.id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null &amp;&amp; name != ''">
+            and a.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="departmentId != null &amp;&amp; departmentId != ''">
+            and a.department_id = #{departmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="createTimeBegin != null &amp;&amp; createTimeBegin  != ''">
+            <![CDATA[ and date_format(a.create_time, '%Y-%m-%d') >= date_format(#{createTimeBegin,jdbcType=VARCHAR}, '%Y-%m-%d') ]]>
+        </if>
+        <if test="createTimeEnd  != null &amp;&amp; createTimeEnd  != ''">
+            <![CDATA[ and date_format(a.create_time, '%Y-%m-%d') <= date_format(#{createTimeEnd,jdbcType=VARCHAR}, '%Y-%m-%d') ]]>
+        </if></select>
 
     <insert id="insert" parameterType="PersonDto">
         insert into person(
@@ -45,6 +69,9 @@
             <if test="departmentId != null &amp;&amp; departmentId != ''">
                 department_id,
             </if>
+            <if test="createTime != null &amp;&amp; createTime != ''">
+                create_time,
+            </if>
         </trim>
         )
         values (
@@ -57,6 +84,9 @@
             </if>
             <if test="departmentId != null &amp;&amp; departmentId != ''">
                 #{departmentId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null &amp;&amp; createTime != ''">
+                #{createTime,jdbcType=VARCHAR},
             </if>
         </trim>
         )
@@ -74,11 +104,14 @@
             <if test="departmentId != null &amp;&amp; departmentId != ''">
                 department_id = #{departmentId,jdbcType=VARCHAR},
             </if>
+            <if test="createTime != null &amp;&amp; createTime != ''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
     </update>
 
     <delete id="delete" parameterType="PersonDto">
-        delete from person where  id = #{id,jdbcType=VARCHAR}
+        delete from person where id = #{id,jdbcType=VARCHAR}
     </delete>
 </mapper>

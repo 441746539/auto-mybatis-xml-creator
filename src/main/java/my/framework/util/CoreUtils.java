@@ -59,6 +59,7 @@ public class CoreUtils {
         CollectionColumn collectionColumn=null;
         AssosiationColumn assosiationColumn=null;
         PrimaryId primaryId = null;
+        DateType dateType = null;
 
         String dbColumnName="";
         for (Field filed:
@@ -75,6 +76,7 @@ public class CoreUtils {
             //普通属性
             primaryId = filed.getAnnotation(PrimaryId.class);
             dbColumnAttr = filed.getAnnotation(DBColumn.class);
+            dateType = filed.getAnnotation(DateType.class);
             if(null != dbColumnAttr|| primaryId != null){
                 if(null != dbColumnAttr)
                     dbColumnName=dbColumnAttr.value();//数据库里的列名
@@ -89,6 +91,17 @@ public class CoreUtils {
                 attributeItem.attrName = filed.getName();
                 attributeItem.columnName = dbColumnName;
                 list.add(attributeItem);
+
+                //解析dataType
+                if(null != dateType){
+                    attributeItem.isDateType = true;
+                    if(StringUtil.isNotNull(dateType.pattern())){
+                        attributeItem.datePattern = dateType.pattern();
+                    }else{
+                        throw new RuntimeException("类【"+clazz.getName()+"】@DateType上的参数填写不能有空值!");
+                    }
+                }
+
                 continue;
             }
 

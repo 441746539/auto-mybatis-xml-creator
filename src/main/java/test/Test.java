@@ -28,6 +28,8 @@ public class Test {
     @org.junit.Test
     public void list(){
         PersonDto param = new PersonDto();
+        param.setCreateTimeBegin("2017-09-07");
+        param.setCreateTimeEnd("2017-09-12");
         //param.setId("1");
         List<Person> list = personMapper.list(param);
         System.out.println(list.size());

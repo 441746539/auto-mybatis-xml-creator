@@ -60,7 +60,7 @@ public class InsertSqlGenerator {
      */
     private static void appendInsertItem(StringBuffer insertItem ,DefaultAttributeItem defaltItem){
         insertItem.append("<if test=\"").append(defaltItem.attrName).append(" != null &amp;&amp; ").append(defaltItem.attrName).append(" != ''\">\n")
-                .append(defaltItem.columnName).append(",\n")
+                .append("`").append(defaltItem.columnName).append("`").append(",\n")
                 .append("</if>\n");
     }
     /**

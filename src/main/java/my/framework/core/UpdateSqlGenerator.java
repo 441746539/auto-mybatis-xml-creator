@@ -58,7 +58,7 @@ public class UpdateSqlGenerator {
      */
     private static void appendUpdateItem(StringBuffer insertItem ,DefaultAttributeItem defaltItem){
         insertItem.append("<if test=\"").append(defaltItem.attrName).append(" != null &amp;&amp; ").append(defaltItem.attrName).append(" != ''\">\n ")
-                .append(defaltItem.columnName).append(" = #{").append(defaltItem.attrName).append(",jdbcType=VARCHAR},\n" +
+                .append("`").append(defaltItem.columnName).append("`").append(" = #{").append(defaltItem.attrName).append(",jdbcType=VARCHAR},\n" +
                 "</if>\n");
     }
 }

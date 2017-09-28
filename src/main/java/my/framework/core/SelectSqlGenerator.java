@@ -10,7 +10,8 @@ import java.util.List;
  * Created by qiang.su on 2017/7/24.
  */
 public class SelectSqlGenerator {
-    public static final String QUERY_METHOD = "list";
+    public static final String QUERY_METHOD_LIST = "list";
+    public static final String QUERY_METHOD_ONE = "queryOne";
     public static final String TABLE_ALIAS = "a";
 
     /**
@@ -26,7 +27,11 @@ public class SelectSqlGenerator {
         String resultMap = tableInfo.resultMap;
         List<AbstractAttributeItem> attibuteItems = tableInfo.items;
 
-        result.append("<select id=\"").append(QUERY_METHOD).append("\" parameterType=\"")
+        doCreateSql(QUERY_METHOD_LIST,result,tableName,parameterType,resultMap,attibuteItems);
+    }
+
+    private static void doCreateSql(String type,StringBuffer result,String tableName,String parameterType,String resultMap,List<AbstractAttributeItem> attibuteItems){
+        result.append("<select id=\"").append(QUERY_METHOD_LIST).append("\" parameterType=\"")
                 .append(parameterType).append("\" resultMap=\"").append(resultMap+"\">\n");
 
         StringBuffer selectItem = new StringBuffer();
@@ -40,9 +45,14 @@ public class SelectSqlGenerator {
             if(attibuteItem instanceof DefaultAttributeItem){
                 defaltItem = (DefaultAttributeItem)attibuteItem;
                 appendSelectItem(selectItem,defaltItem);
-                appendWhereParam(whereParam,defaltItem);
+                if(QUERY_METHOD_LIST.equals(type))
+                    appendWhereParam(whereParam,defaltItem);
             }
         }
+
+        if(QUERY_METHOD_ONE.equals(type))
+            whereParam.append(" and a.id = #{id,jdbcType=VARCHAR}");
+
         selectItem = selectItem.deleteCharAt(selectItem.length()-1);//删掉最后逗号
         result.append("select ").append(selectItem).append(" from ").append(tableName).append("  ").append(TABLE_ALIAS).append("\n")
                 .append(" where 1=1 \n").append(whereParam);
@@ -64,8 +74,18 @@ public class SelectSqlGenerator {
      * @param defaltItem
      */
     private static void appendWhereParam(StringBuffer whereParam ,DefaultAttributeItem defaltItem){
-        whereParam.append("<if test=\"").append(defaltItem.attrName).append(" != null &amp;&amp; ").append(defaltItem.attrName).append(" != ''\">\n ")
-               .append("and ").append(TABLE_ALIAS).append(".").append(defaltItem.columnName).append(" = #{").append(defaltItem.attrName).append(",jdbcType=VARCHAR}\n" +
-                         "</if>\n");
+
+        if(defaltItem.isDateType){
+            whereParam.append(" <if test=\"").append(defaltItem.attrName).append("Begin").append(" != null &amp;&amp; ").append(defaltItem.attrName).append("Begin").append("  != ''\">\n")
+                            .append("<![CDATA[ and date_format(").append(TABLE_ALIAS).append(".").append(defaltItem.columnName).append(", '%Y-%m-%d') >= date_format(#{").append(defaltItem.attrName).append("Begin").append(",jdbcType=VARCHAR}, '%Y-%m-%d') ]]>\n")
+                       .append("</if>\n")
+                       .append("<if test=\"").append(defaltItem.attrName).append("End").append("  != null &amp;&amp; ").append(defaltItem.attrName).append("End").append("  != ''\">\n")
+                            .append("<![CDATA[ and date_format(").append(TABLE_ALIAS).append(".").append(defaltItem.columnName).append(", '%Y-%m-%d') <= date_format(#{").append(defaltItem.attrName).append("End").append(",jdbcType=VARCHAR}, '%Y-%m-%d') ]]>\n")
+                       .append("</if>");
+        }else {
+            whereParam.append("<if test=\"").append(defaltItem.attrName).append(" != null &amp;&amp; ").append(defaltItem.attrName).append(" != ''\">\n ")
+                                .append("and ").append(TABLE_ALIAS).append(".").append(defaltItem.columnName).append(" = #{").append(defaltItem.attrName).append(",jdbcType=VARCHAR}\n" +
+                             "</if>\n");
+        }
     }
 }

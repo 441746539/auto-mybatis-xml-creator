@@ -13,5 +13,15 @@ public class DefaultAttributeItem extends AbstractAttributeItem {
      * 对应数据库的列名
      */
     public String columnName;
+
+    /**
+     * 是否时间类型
+     */
+    public boolean isDateType;
+
+    /**
+     * 时间类型格式
+     */
+    public String datePattern;
 }
 

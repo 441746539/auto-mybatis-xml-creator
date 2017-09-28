@@ -43,7 +43,7 @@ public class DeleteSqlGenerator {
 
 
         result.append("delete from ").append(tableName).append(" where ");
-        if(null == primaryItem)
+        if(null != primaryItem)
             result.append(primaryItem.columnName).append(" = ").append("#{").append(primaryItem.attrName).append(",jdbcType=VARCHAR}\n");
         else
             result.append(" id = #{id,jdbcType=VARCHAR} \n");

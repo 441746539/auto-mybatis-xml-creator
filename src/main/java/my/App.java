@@ -1,6 +1,7 @@
 package my;
 
-import my.demo.Department;
+import my.bean.*;
+import my.demo.Person;
 import my.framework.core.CoreProcessor;
 
 /**
@@ -10,7 +11,47 @@ public class App {
 
     public static void main(String[] args) {
         //System.out.println(CoreProcessor.doProcess("test.dao.PersonMapper", Person.class).toString());
-        System.out.println(CoreProcessor.doProcess("test.dao.DepartmentMapper", Department.class).toString());
+        //System.out.println(CoreProcessor.doProcess("test.dao.DepartmentMapper", Department.class).toString());
+        System.out.println(CoreProcessor.doProcess("t", CallVisitAutoEstimate.class).toString());
     }
 
 }
+
+
+//interface方法如下：
+//   /**
+//     * list
+//     * @param param
+//     * @param pagination
+//     * @return
+//     */
+//    List<MaintenaceInfo> list(MaintenaceInfoDto param,Pagination pagination);
+//    List<MaintenaceInfo> list(MaintenaceInfoDto param);
+//
+//    /**
+//     * add
+//     * @param param
+//     * @return
+//     */
+//    int insert(MaintenaceInfoDto param);
+//
+//    /**
+//     * update
+//     * @param param
+//     * @return
+//     */
+//    int update(MaintenaceInfoDto param);
+//
+//    /**
+//     * delet
+//     * @param param
+//     * @return
+//     */
+//    int delete(MaintenaceInfoDto param);
+//
+//    /**
+//     * queryone
+//     * @param param
+//     * @return
+//     */
+//    MaintenaceInfo queryOne(MaintenaceInfoDto param);
