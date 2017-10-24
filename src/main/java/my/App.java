@@ -10,9 +10,9 @@ import my.framework.core.CoreProcessor;
 public class App {
 
     public static void main(String[] args) {
-        System.out.println(CoreProcessor.doProcess("test.dao.PersonMapper", Person.class).toString());
+        //System.out.println(CoreProcessor.doProcess("test.dao.PersonMapper", Person.class).toString());
         //System.out.println(CoreProcessor.doProcess("test.dao.DepartmentMapper", Department.class).toString());
-        //System.out.println(CoreProcessor.doProcess("t", CallVisitAutoEstimate.class).toString());
+        System.out.println(CoreProcessor.doProcess("t", CollegeClassroomLesson.class).toString());
     }
 
 }
@@ -27,6 +27,8 @@ public class App {
 //     */
 //    List<MaintenaceInfo> list(MaintenaceInfoDto param,Pagination pagination);
 //    List<MaintenaceInfo> list(MaintenaceInfoDto param);
+//    List<MaintenaceInfo> listNoRelate(MaintenaceInfoDto param,Pagination pagination);
+//    List<MaintenaceInfo> listNoRelate(MaintenaceInfoDto param);
 //
 //    /**
 //     * add
@@ -55,3 +57,4 @@ public class App {
 //     * @return
 //     */
 //    MaintenaceInfo queryOne(MaintenaceInfoDto param);
+//    MaintenaceInfo queryOneNoRelate(MaintenaceInfoDto param);

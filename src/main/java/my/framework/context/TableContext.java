@@ -45,7 +45,7 @@ public class TableContext {
      * @param clazz
      * @param items
      */
-    public static void initContext(Class clazz, List<AbstractAttributeItem> items) {
+    public static void initContext(Class clazz, List<AbstractAttributeItem> items,boolean main) {
         //已经初始化过的跳过
         if(initedClass.contains(clazz))
             return;
@@ -53,6 +53,7 @@ public class TableContext {
         TableItem tableItem = CoreUtils.extractTableInfo(clazz);
         tableItem.items = items;
         tableItem.entitySimpleName = clazz.getSimpleName();
+        tableItem.mainTable = main;
         tableInfos.add(tableItem);
         //放到map
         tableInfosMap.put(clazz,tableItem);
@@ -68,13 +69,13 @@ public class TableContext {
             if(item instanceof CollectionAttributeItem){
                 collectionAttribute = (CollectionAttributeItem)item;
                 Class relClazz = collectionAttribute.itemClass;
-                initContext(relClazz,CoreUtils.extractTargetInfo(relClazz));
+                initContext(relClazz,CoreUtils.extractTargetInfo(relClazz),false);
                 continue;
             }
             if(item instanceof AssociationAttributeItem){
                 associationAttribute = (AssociationAttributeItem)item;
                 Class relClazz = associationAttribute.itemClass;
-                initContext(relClazz,CoreUtils.extractTargetInfo(relClazz));
+                initContext(relClazz,CoreUtils.extractTargetInfo(relClazz),false);
             }
         }
     }
@@ -86,5 +87,7 @@ public class TableContext {
         public String parameterType;
         public String resultMap;
         public List<AbstractAttributeItem> items;
+
+        public boolean mainTable = false;//是否最外层主表
     }
 }

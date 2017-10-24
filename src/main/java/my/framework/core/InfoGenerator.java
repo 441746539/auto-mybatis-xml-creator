@@ -30,10 +30,10 @@ public class InfoGenerator {
         tableInfos) {
             String resultEntity = tableInfo.entitySimpleName;
             String resultMap = tableInfo.resultMap;
+
+            //result map
             result.append("<resultMap type=\""+resultEntity+"\" id=\""+resultMap+"\">\n");
-
             List<AbstractAttributeItem> items = tableInfo.items;
-
             //遍历属性
             DefaultAttributeItem defaltItem;
             AssociationAttributeItem associationItem;
@@ -55,7 +55,7 @@ public class InfoGenerator {
                     result.append("<association property=\"").append(associationItem.attrName).append("\"")
                             .append(" column=\"").append(associationItem.foreignKeyColunm).append("\"")
                             .append(" javaType=\"").append(associationItem.itemClass.getSimpleName()).append("\"")
-                            .append(" select=\"").append(associationItem.associateSelectMethod()).append("\"/>");
+                            .append(" select=\"").append(associationItem.associateSelectMethod()).append("\"/>\n");
                     associationAttributes.add(associationItem);
                 }
                 //collection属性
@@ -65,11 +65,29 @@ public class InfoGenerator {
                             .append(" column=\"").append(collectionItem.foreignKeyColunm).append("\"")
                             .append(" javaType=\"ArrayList\"")
                             .append(" ofType=\"").append(collectionItem.itemClass.getSimpleName()).append("\"")
-                            .append(" select=\"").append(collectionItem.associateSelectMethod()).append("\"/>");
+                            .append(" select=\"").append(collectionItem.associateSelectMethod()).append("\"/>\n");
                     collectionAttributes.add(collectionItem);
                 }
             }
             result.append("</resultMap>\n");
+
+            //main result map without relate
+            if(tableInfo.mainTable) {
+                result.append("<resultMap type=\"" + resultEntity + "\" id=\"" + resultMap + "_NoRelate\">\n");
+                for (AbstractAttributeItem item :
+                        items) {
+                    //普通属性
+                    if (item instanceof DefaultAttributeItem) {
+                        defaltItem = (DefaultAttributeItem) item;
+                        if (defaltItem.isPrimaryId) {
+                            result.append("<id column=\"" + defaltItem.columnName.toUpperCase() + "\" property=\"" + defaltItem.attrName + "\" jdbcType=\"VARCHAR\"/>\n");
+                        } else {
+                            result.append("<result column=\"" + defaltItem.columnName.toUpperCase() + "\" property=\"" + defaltItem.attrName + "\" jdbcType=\"VARCHAR\"/>\n");
+                        }
+                    }
+                }
+                result.append("</resultMap>\n");
+            }
         }
 
         //处理所有外部关联字段生成关联查询sql

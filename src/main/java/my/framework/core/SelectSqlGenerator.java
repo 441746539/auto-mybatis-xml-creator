@@ -27,11 +27,18 @@ public class SelectSqlGenerator {
         String resultMap = tableInfo.resultMap;
         List<AbstractAttributeItem> attibuteItems = tableInfo.items;
 
-        doCreateSql(QUERY_METHOD_LIST,result,tableName,parameterType,resultMap,attibuteItems);
+        doCreateSql(QUERY_METHOD_LIST,result,tableName,parameterType,resultMap,attibuteItems,false);
+        doCreateSql(QUERY_METHOD_ONE,result,tableName,parameterType,resultMap,attibuteItems,false);
+
+        doCreateSql(QUERY_METHOD_LIST,result,tableName,parameterType,resultMap,attibuteItems,true);
+        doCreateSql(QUERY_METHOD_ONE,result,tableName,parameterType,resultMap,attibuteItems,true);
     }
 
-    private static void doCreateSql(String type,StringBuffer result,String tableName,String parameterType,String resultMap,List<AbstractAttributeItem> attibuteItems){
-        result.append("<select id=\"").append(QUERY_METHOD_LIST).append("\" parameterType=\"")
+    private static void doCreateSql(String type,StringBuffer result,String tableName,String parameterType,String resultMap,List<AbstractAttributeItem> attibuteItems,boolean noRelate){
+        if(noRelate)
+            resultMap = resultMap +"_NoRelate";
+        String seleteId = noRelate?type+"NoRelate":type;
+        result.append("<select id=\"").append(seleteId).append("\" parameterType=\"")
                 .append(parameterType).append("\" resultMap=\"").append(resultMap+"\">\n");
 
         StringBuffer selectItem = new StringBuffer();
@@ -51,7 +58,7 @@ public class SelectSqlGenerator {
         }
 
         if(QUERY_METHOD_ONE.equals(type))
-            whereParam.append(" and a.id = #{id,jdbcType=VARCHAR}");
+            whereParam.append(" and a.id = #{id,jdbcType=VARCHAR}\n");
 
         selectItem = selectItem.deleteCharAt(selectItem.length()-1);//删掉最后逗号
         result.append("select ").append(selectItem).append(" from ").append(tableName).append("  ").append(TABLE_ALIAS).append("\n")

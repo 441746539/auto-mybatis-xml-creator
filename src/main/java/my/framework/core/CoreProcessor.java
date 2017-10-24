@@ -18,7 +18,7 @@ public class CoreProcessor {
         //1.解析各个字段属性
         List<AbstractAttributeItem> items = CoreUtils.extractTargetInfo(clazz);
         //2.初始化上下文
-        TableContext.initContext(clazz,items);
+        TableContext.initContext(clazz,items,true);
         //3.生成mapper信息和crud sql
         InfoGenerator.createResultMapper(result);
         StringBufferUtil.changeLine(result);
