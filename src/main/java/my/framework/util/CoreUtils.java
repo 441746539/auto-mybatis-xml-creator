@@ -81,7 +81,7 @@ public class CoreUtils {
                 if(null != dbColumnAttr)
                     dbColumnName=dbColumnAttr.value();//数据库里的列名
                 if(StringUtil.isNull(dbColumnName)) {
-                    dbColumnName = filed.getName();
+                    dbColumnName = Underline2Camel.camel2Underline(filed.getName());
                 }
 
                 DefaultAttributeItem attributeItem = new DefaultAttributeItem();

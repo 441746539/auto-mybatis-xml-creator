@@ -67,12 +67,18 @@ public class TableContext {
                 items ) {
             //collection
             if(item instanceof CollectionAttributeItem){
+
+                tableItem.hasSpecialAttr = true;//包含级联属性
+
                 collectionAttribute = (CollectionAttributeItem)item;
                 Class relClazz = collectionAttribute.itemClass;
                 initContext(relClazz,CoreUtils.extractTargetInfo(relClazz),false);
                 continue;
             }
             if(item instanceof AssociationAttributeItem){
+
+                tableItem.hasSpecialAttr = true;//包含级联属性
+
                 associationAttribute = (AssociationAttributeItem)item;
                 Class relClazz = associationAttribute.itemClass;
                 initContext(relClazz,CoreUtils.extractTargetInfo(relClazz),false);
@@ -89,5 +95,6 @@ public class TableContext {
         public List<AbstractAttributeItem> items;
 
         public boolean mainTable = false;//是否最外层主表
+        public boolean hasSpecialAttr = false;//是否有级联属性
     }
 }
