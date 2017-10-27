@@ -72,6 +72,7 @@ public class InfoGenerator {
             result.append("</resultMap>\n");
 
             //main result map without relate
+            if(tableInfo.hasSpecialAttr){
             if(tableInfo.mainTable) {
                 result.append("<resultMap type=\"" + resultEntity + "\" id=\"" + resultMap + "_NoRelate\">\n");
                 for (AbstractAttributeItem item :
@@ -89,6 +90,7 @@ public class InfoGenerator {
                 result.append("</resultMap>\n");
             }
         }
+    }
 
         //处理所有外部关联字段生成关联查询sql
         for (AssociationAttributeItem associationAttribute:
