@@ -77,7 +77,7 @@ public class SelectSqlGenerator {
      * @param defaltItem
      */
     private static void appendSelectItem(StringBuffer selectItem, DefaultAttributeItem defaltItem) {
-        selectItem.append(TABLE_ALIAS).append(".").append(defaltItem.columnName).append(",");
+        selectItem.append(TABLE_ALIAS).append(".`").append(defaltItem.columnName).append("`,");
     }
 
     /**
