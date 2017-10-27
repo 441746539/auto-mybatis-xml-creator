@@ -12,7 +12,7 @@ Createdby 苏强 20170725
                     resultMap是这个表生成的resultMap的id,一般给"类名+Map"。
   （2）.添加映射属性字段
         主键用@PrimaryId标记。
-        除了主键，字段名和数据库字段有映射，加上@DBColumn注解。字段列名和数据库不一致，用@DBColumn("department_id")标记。
+        除了主键，字段名和数据库字段有映射，加上@DBColumn注解。字段列名和数据库不一致，用@DBColumn("department_id")标记。不写标记默认转换成驼峰规则。
   （3）.关联查询
         此处需要关联查询List<Person>,添加此属性，标注注解 @CollectionColumn(itemClass = Person.class, foreignKeyColunm = "id", relColumnInforeignTable = "department_id")
         注解参数中，itemClass表示关联对象Class；
