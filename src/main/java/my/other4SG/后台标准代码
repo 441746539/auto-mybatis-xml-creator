@@ -1,0 +1,166 @@
+-- 标准Controller
+@Controller
+@RequestMapping("/college/lesson")
+public class CollegeClassroomLessonController extends BaseController {
+
+    private static Log log = LogFactory.getLog(CollegeClassroomLessonController.class);
+
+    @Autowired
+    private CollegeClassroomLessonService collegeClassroomLessonService;
+
+    /**
+     * 列表查询
+     *
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/list.htm")
+    public String list(ModelMap modelMap, Pagination pagination, CollegeClassroomLessonDto param) {
+        try {
+            pagination = collegeClassroomLessonService.list(param, pagination);
+        } catch (Exception e) {
+            log.error("CollegeClassroomLessonController.list error", e);
+        }
+        modelMap.addAttribute("pagination", pagination).addAttribute("param", param);
+        return "web/baby-paradise/base/expert/list";
+    }
+
+    /**
+     * detail
+     *
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/detail.htm")
+    public String detail(ModelMap modelMap, Pagination pagination, CollegeClassroomLessonDto dto) {
+        CollegeClassroomLessonDto result = new CollegeClassroomLessonDto();
+        try {
+            result = collegeClassroomLessonService.queryOne(dto);
+        } catch (Exception e) {
+            log.error("CollegeClassroomLessonController.detail error", e);
+        }
+        modelMap.addAttribute("pagination", pagination).addAttribute("result", result);
+        return "web/baby-paradise/base/expert/detail";
+    }
+
+    /**
+     * add or edit view
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/saveview")
+    public String saveView(ModelMap modelMap, String type, CollegeClassroomLessonDto param){
+        try{
+            if("edit".equals(type)){
+                CollegeClassroomLessonDto queryOneParam = new CollegeClassroomLessonDto();
+                queryOneParam.setId(param.getId());
+                param = collegeClassroomLessonService.queryOne(queryOneParam);
+            }else{
+            }
+            modelMap.addAttribute("param",param);
+        }catch (Exception e){
+            log.error("CollegeClassroomLessonController.addView error", e);
+        }
+        return "web/baby-paradise/base/expert/save";
+    }
+
+    /**
+     * save
+     * @param modelMap
+     * @param param
+     * @param request
+     * @param response
+     */
+    @RequestMapping("save")
+    public void save(ModelMap modelMap, CollegeClassroomLessonDto param, HttpServletRequest request, HttpServletResponse response){
+        AjaxDoneUtil ajaxDoneUtil ;
+        String currentUser = super.getUserName(request);
+        String paramId = param.getId();
+        try{
+            //add or edit
+            if(StringUtil.isNull(paramId)){//add
+                param.setCreateUser(currentUser);
+                param.setCreateTime(DateUtil.getDate(DateUtil.DATE_PATTERN));
+                collegeClassroomLessonService.add(param);
+                ajaxDoneUtil = AjaxDoneUtilCtreateUtil.navTabForwardToUrlAndCloseCurrent("college/lesson/list.htm","lesson");
+            }else{
+                param.setUpdateUser(currentUser);
+                param.setUpdateTime(DateUtil.getDate(DateUtil.DATE_PATTERN));
+                collegeClassroomLessonService.edit(param);
+                ajaxDoneUtil = AjaxDoneUtilCtreateUtil.navTabForwardToUrlAndCloseCurrent("college/lesson/list.htm","lesson");
+            }
+        }catch (Exception e){
+            ajaxDoneUtil = AjaxDoneUtilCtreateUtil.commonFailed();
+            log.error("CollegeClassroomLessonController.save error,currentUser:"+currentUser, e);
+        }
+        renderForAjax(response,ajaxDoneUtil);
+    }
+
+    /**
+     * 删除
+     *
+     * @param modelMap
+     * @param param
+     * @return
+     */
+    @RequestMapping("/delete")
+    public void delete(ModelMap modelMap, CollegeClassroomLessonDto param, HttpServletRequest request, HttpServletResponse response) {
+        AjaxDoneUtil ajaxDoneUtil;
+        String currentUser = super.getUserName(request);
+        try {
+            param.setUpdateUser(currentUser);
+            param.setUpdateTime(DateUtil.getDate(DateUtil.DATE_PATTERN));
+            collegeClassroomLessonService.batch(param);
+            ajaxDoneUtil = AjaxDoneUtilCtreateUtil.commonSuccess();
+            log.info("CollegeClassroomLessonController.delete success,currentUser:" + currentUser  + ", ids:" + param.getId());
+        } catch (Exception e) {
+            ajaxDoneUtil = AjaxDoneUtilCtreateUtil.commonFailed();
+            log.error("CollegeClassroomLessonController.delete error,currentUser:" + currentUser, e);
+        }
+        renderForAjax(response, ajaxDoneUtil);
+    }
+}
+
+-- 标准Service:
+
+Pagination list(CollegeClassroomLessonDto param, Pagination pagination);
+CollegeClassroomLessonDto queryOne(CollegeClassroomLessonDto dto);
+void add(CollegeClassroomLessonDto param);
+void edit(CollegeClassroomLessonDto param);
+void delete(CollegeClassroomLessonDto param);
+
+
+    @Override
+    public Pagination list(CollegeExpertDto dto, Pagination pagination) {
+        List<CollegeExpert> list = collegeExpertDao.list(dto, pagination);
+        List<CollegeExpertDto> listDto = ConvertDtoUtils.convertList(list, CollegeExpertDto.class);
+
+        pagination.setList(listDto);
+        return pagination;
+    }
+
+    @Override
+    public CollegeExpertDto queryOne(CollegeExpertDto queryOneParam) {
+        CollegeExpert result = collegeExpertDao.queryOne(queryOneParam);
+        CollegeExpertDto resultDto = new CollegeExpertDto();
+        if (result != null)
+            ConvertDtoUtils.convert(result, resultDto);
+        return resultDto;
+    }
+
+    @Override
+    public void add(CollegeExpertDto param) throws Exception {
+        //保存记录
+        collegeExpertDao.insert(param);
+    }
+
+    @Override
+    public void edit(CollegeExpertDto param) throws Exception {
+        //保存记录
+        collegeExpertDao.update(param);
+    }
+
+    @Override
+    public void delete(CollegeExpertDto param) {
+        collegeExpertDao.delete(param);
+    }

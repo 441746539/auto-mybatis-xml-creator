@@ -1,0 +1,79 @@
+<div class="show_dow1">
+    <img src="http://" alt="" class="">
+    <span class="close1"></span>
+</div>
+<div class="noform">
+    <hr class="line">
+    <span class="bom">
+                <span class="title title1">专家管理详情页</span>
+                <br>
+    </span>
+</div>
+
+<form method="post" action="" class="pageForm required-validate form_work"
+      onsubmit="return validateCallback(this,navTabAjaxDone)" >
+    <div class="formBar button_All save_left">
+        <ul>
+            <li class="tdli">
+                <div class="buttonActive">
+                    <div class="reset">
+                        <button type="button" id="f_reset" onclick="expert();">返回</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container-fluid clearfix form_page">
+        <div class="row underline">
+            <p class="cols-lg-4 cols-md-6 cols-sm-12">
+                <label class="inputname inputname_width">专家姓名: </label>
+                <span class="input225 input252 detail_page">${result.name!}</span>
+            </p>
+            <p class="cols-lg-4 cols-md-6 cols-sm-12">
+                <label class="inputname inputname_width">专家单位: </label>
+                <span class="input225 input252 detail_page">${result.hospital!}</span>
+            </p>
+            <p class="cols-lg-4 cols-md-6 cols-sm-12">
+                <label class="inputname inputname_width">专家职务: </label>
+                <span class="input225 input252 detail_page">${result.job!}</span>
+            </p>
+            <p class="cols-lg-4 cols-md-6 cols-sm-12" style="height: auto!important;">
+                <label class="inputname inputname_width">专家图片: </label>
+                <span  class="input225 input252 detail_page imgs">
+                <img class="ImgPr2" src="http://${result.img!}" alt="">
+                    <span class="masks"><span onclick="preview1()">&#xe635;</span></span>
+            </span>
+            </p>
+        </div>
+    </div>
+</form>
+<style>
+    .underline p {
+        position: relative;
+    }
+
+    .textInput,
+    .remark,
+    input.focus {
+        padding: 0 4px !important;
+    }
+</style>
+<script>
+    function preview1(){
+        $(".show_dow1").addClass("blocks");
+        var ImgPr2 = $(".ImgPr2").attr("src");
+        $(".show_dow1 img").attr("src",ImgPr2);
+        $(".close1").click(function(){
+            close1()
+        })
+    }
+    function close1(){
+        $(".show_dow1").removeClass("blocks");
+    }
+</script>
+
+
+
+
+

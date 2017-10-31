@@ -1,0 +1,83 @@
+<div class="noform">
+    <hr class="line">
+    <span class="bom">
+    <span class="title title1">专家管理列表页</span>
+    <br>
+</span>
+</div>
+<div id="expert_list" class="allList">
+    <form id="pagerForm" class="required-validate rights" onsubmit="return navTabSearch(this);" action="${base}/college/expert/list.htm" method="post">
+        <#include "/view/framework/page/page_label.html"/>
+        <div class="pageHeader">
+            <table class="gtsearchtable" width="auto" border="0">
+                <tr class="trName">
+                    <td width="auto">
+
+                        <input class="input225 input_notop" type="text" name="name" value="<#if param??>${param.name!}</#if>" placeholder="专家姓名关键字" title="专家姓名关键字">
+                    </td>
+                    <td width="auto">
+                        <ul>
+                            <li class="tdli">
+                                <div class="buttonActive"><div class="buttonContent"><button type="submit" id="f_search">查询</button></div></div>
+                                <div class="buttonActive"><div class="reset"><button type="button" id="f_reset" onclick="reset_gt($(this));">重置</button></div></div>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+    <div class="panelBar inline_left">
+        <ul class="toolBar">
+            <li><a class="add" href="${base}/college/expert/saveview.htm" target="navTab" rel="expert_add" title="专家新增"><span title="专家新增">新增</span></a></li>
+            <li><a class="undercarriage" href="${base}/college/expert/delete.htm" target="selectedTodo" rel="ids" postType="string"  title="确定要删除所选信息吗?"><span title="删除">删除</span></a></li>
+        </ul>
+    </div>
+    <table class="table layout_table" layoutH="220">
+        <thead>
+            <tr align="center">
+                <th><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th>专家姓名</th>
+                <th>专家单位</th>
+                <th>专家职务</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th width="150">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        <#if pagination?? && pagination.list?? && pagination.list?size &gt; 0>
+            <#list pagination.list as item>
+                <tr align="center">
+                    <td><input name="ids" value="${item.id!}" type="checkbox"></td>
+                    <td>${item.name!}</td>
+                    <td>${item.hospital!}</td>
+                    <td>${item.job!}</td>
+                    <td>${item.createUserStr!}</td>
+                    <td>${item.createTime!}</td>
+                    <td>
+                        <a target="navTab" href="${base}/college/expert/saveview.htm?id=${item.id!}&type=edit" rel="expert_update" title="专家编辑"><span title="专家编辑" class="a_icon">&#xe629;</span></a>
+                        <a target="navTab" href="${base}/college/expert/detail.htm?id=${item.id!}" rel="expert_detail" title="详情"><span title="详情" class="a_icon">&#xe62d;</span></a>
+                    </td>
+                </tr>
+            </#list>
+            <#else>
+                <tr>
+                    <td class="sorry" colspan="17">对不起,未找到符合条件的信息！</td>
+                </tr>
+        </#if>
+        </tbody>
+    </table>
+    <#include "/view/framework/page/page_panel.html"/>
+</div>
+
+
+<style>
+    .inline_left {
+        float: left;
+    }
+    p {
+        font-size: 12px;
+    }
+</style>
