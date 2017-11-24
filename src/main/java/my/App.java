@@ -12,7 +12,7 @@ public class App {
     public static void main(String[] args) {
         //System.out.println(CoreProcessor.doProcess("test.dao.PersonMapper", Person.class).toString());
         //System.out.println(CoreProcessor.doProcess("test.dao.DepartmentMapper", Department.class).toString());
-        System.out.println(CoreProcessor.doProcess("t", CallQuestionAnswer.class).toString());
+        System.out.println(CoreProcessor.doProcess("t", Member.class).toString());
     }
 
 }
@@ -45,7 +45,7 @@ public class App {
 //    int update(MaintenaceInfoDto param);
 //
 //    /**
-//     * delet
+//     * delete
 //     * @param param
 //     * @return
 //     */
